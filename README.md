@@ -9,3 +9,8 @@
 <li> npx prisma migrate dev --name init (migate)
 
 <li>node ชื่อไฟล์
+
+# authen author
+<li> npm init -y</li>
+<li>npm i express jsonwebtoken</li>
+<li>node ชื่อไฟล์</li>
