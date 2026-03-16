@@ -1,11 +1,11 @@
 # ruam-webpro2
 
 # prisma
-# npm init -y
-# npm install prisma@6 --save-dev
-# npm install @prisma/client@6
+<li>npm init -y</li>
+<li> npm install prisma@6 --save-dev
+<li> npm install @prisma/client@6
 
-# npx prisma init --datasource-provider sqlite (sturc prisma)
-# npx prisma migrate dev --name init (migate)
+<li> npx prisma init --datasource-provider sqlite (sturc prisma)
+<li> npx prisma migrate dev --name init (migate)
 
-# node ชื่อไฟล์
+<li>node ชื่อไฟล์
