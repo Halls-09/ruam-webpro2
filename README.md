@@ -1,5 +1,9 @@
 # ruam-webpro2
-
+# swagger
+<li> npm init -y
+<li> npm i express
+<li> npm i swagger-ui-express yamljs
+  
 # prisma
 <li>npm init -y</li>
 <li> npm install prisma@6 --save-dev
