@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Toy Store Inventory API
+  description: API สำหรับจัดการสต็อกสินค้าและรายการของเล่นภายในร้าน
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+paths:
+  /toys:
+    get:
+      summary: ดึงรายการของเล่นทั้งหมด (สรุป)
+      description: ส่งคืนรายการของเล่นในรูปแบบย่อ พร้อมราคาที่จัดรูปแบบแล้ว (priceDisplay)
+      responses:
+        '200':
+          description: สำเร็จ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ToySummary'
+    post:
+      summary: เพิ่มของเล่นใหม่
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToyInput'
+      responses:
+        '201':
+          description: สร้างของเล่นใหม่สำเร็จ
+        '400':
+          description: ข้อมูลไม่ครบถ้วน (เช่น ลืมใส่ชื่อหรือราคา)
+
+  /toys/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: รหัส ID ของของเล่น
+        schema:
+          type: integer
+    get:
+      summary: ดูรายละเอียดของเล่นรายชิ้น
+      responses:
+        '200':
+          description: พบข้อมูลของเล่น
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToyFull'
+        '404':
+          description: ไม่พบของเล่นรหัสนี้ในระบบ
+    put:
+      summary: แก้ไขข้อมูลของเล่น
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToyInput'
+      responses:
+        '200':
+          description: อัปเดตข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบของเล่นที่ต้องการแก้ไข
+    delete:
+      summary: ลบของเล่นออกจากสต็อก
+      responses:
+        '200':
+          description: ลบข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบของเล่นที่ต้องการลบ
+
+components:
+  schemas:
+    ToySummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Robot X"
+        category:
+          type: string
+          example: "Action Figure"
+        priceDisplay:
+          type: string
+          example: "฿550"
+
+    ToyFull:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+      example:
+        id: 1
+        name: "Robot X"
+        category: "Action Figure"
+        price: 550
+        stock: 10
+
+    ToyInput:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+      example:
+        name: "Lego City"
+        category: "Blocks"
+        price: 1200
+        stock: 5

@@ -1,0 +1,110 @@
+openapi : 3.1.0
+info: 
+  title: Longtum API
+  description: API สำหรับจัดการข้อมูลของ Longtum
+  version: 1.0.0
+
+server:
+  - url: http://localhost:4000
+    description: Local Development Server
+
+paths:
+  /snacks:
+    get:
+    summay : ดึงข้อมูลของ Longtum
+    description: ส่งคืนข้อมูลของ Longtum ในรูปแบบ JSON
+    responses:
+      '200':
+        description: สำเร็จ
+        content:
+            application/json:
+              schema:
+                type: array
+                items:
+                properties:
+                  id:
+                    type: integer
+                    description: รหัส ID ของ Longtum
+                  name:
+                    type: string
+                    description: ชื่อของ Longtum
+                  price:
+                    type: integer
+                    description: ราคาของ Longtum
+  post:
+    summary: เพิ่มข้อมูลของ Longtum
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: ชื่อของ Longtum
+              price:
+                type: integer
+                description: ราคาของ Longtum
+    responses:
+      '201':
+        description: สร้างข้อมูลของ Longtum สำเร็จ
+      '400':
+        description: ข้อมูลไม่ครบถ้วน (เช่น ลืมใส่ชื่อหรือราคา)
+
+  /snacks/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: รหัส ID ของ Longtum
+        schema:
+          type: integer
+    get:
+      summary: ดูรายละเอียดของ Longtum รายชิ้น
+      responses:
+        '200':
+          description: พบข้อมูลของ Longtum
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: รหัส ID ของ Longtum
+                  name:
+                    type: string
+                    description: ชื่อของ Longtum
+                  price:
+                    type: integer
+                    description: ราคาของ Longtum
+        '404':
+          description: ไม่พบข้อมูลของ Longtum รหัสนี้ในระบบ
+    put:
+      summary: แก้ไขข้อมูลของ Longtum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ชื่อของ Longtum
+                price:
+                  type: integer
+                  description: ราคาของ Longtum
+      responses:
+        '200':  
+          description: อัปเดตข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบข้อมูลของ Longtum ที่ต้องการแก้ไข
+    delete:
+      summary: ลบข้อมูลของ Longtum ออกจากระบบ
+      responses:
+        '200':
+          description: ลบข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบข้อมูลของ Longtum ที่ต้องการลบ
+    

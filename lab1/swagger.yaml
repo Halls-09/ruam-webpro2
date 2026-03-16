@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Book Management API
+  description: ระบบจัดการร้านหนังสือ (Practice Exercise)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local Development Server
+
+paths:
+  /books:
+    get:
+      summary: ดึงรายการหนังสือทั้งหมด (สรุป)
+      description: ส่งคืนรายการหนังสือในรูปแบบย่อ พร้อมราคาที่จัดรูปแบบแล้ว (priceDisplay)
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: ค้นหาจากชื่อเรื่อง (เช่น Harry)
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [price_asc, price_desc]
+          description: เรียงลำดับราคา (price_asc=ถูกไปแพง, price_desc=แพงไปถูก)
+      responses:
+        '200':
+          description: สำเร็จ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookSummary'
+    post:
+      summary: เพิ่มหนังสือใหม่
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '201':
+          description: สร้างหนังสือใหม่สำเร็จ
+        '400':
+          description: ข้อมูลไม่ครบถ้วน (เช่น ลืมใส่ชื่อหรือราคา)
+
+  /books/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: รหัส ID ของหนังสือ
+        schema:
+          type: integer
+    get:
+      summary: ดูรายละเอียดหนังสือรายชิ้น
+      responses:
+        '200':
+          description: พบข้อมูลหนังสือ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookFull'
+        '404':
+          description: ไม่พบหนังสือรหัสนี้ในระบบ
+    put:
+      summary: แก้ไขข้อมูลหนังสือ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '200':
+          description: อัปเดตข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบหนังสือที่ต้องการแก้ไข
+    delete:
+      summary: ลบหนังสือออกจากสต็อก
+      responses:
+        '200':
+          description: ลบข้อมูลสำเร็จ
+        '404':
+          description: ไม่พบหนังสือที่ต้องการลบ
+
+components:
+  schemas:
+    BookSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+    
+    BookInput:
+      type: object
+      required:
+        - title
+        - price
+      properties:
+        title:
+          type: string
+          example: "New Book Title"
+        author:
+          type: string
+          example: "John Doe"
+        category:
+          type: string
+          example: "General"
+        price:
+          type: number
+          example: 250
+        stock:
+          type: integer
+          example: 10
